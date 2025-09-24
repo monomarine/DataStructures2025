@@ -27,11 +27,11 @@ namespace LinkedList
          * функционал:
          * 
          * получить первый элемент !
-         * получить последний элемент - сам
+         * получить последний элемент - 1
          * 
-         * удалить первый элемент - сам
+         * удалить первый элемент - 1
          * удалить последний элемент !
-         * удалить элемент по его данным - сам
+         * удалить элемент по его данным - 1
          * 
          * проверить наличие элемента !
          * перевернуть!
@@ -58,6 +58,26 @@ namespace LinkedList
             }
             _head = prev;
         }
+
+
+        public void RemoveFirst()
+        {
+            if (IsEmpty)
+                throw new ArgumentNullException("список пуст");
+
+            else if (Count == 1)
+            {
+                Clear();
+            }
+
+            else
+            {
+                _head = _head.Next;
+            }
+
+            _count--;
+        }
+
         public void RemoveLast()
         {
             if(IsEmpty)
@@ -86,6 +106,14 @@ namespace LinkedList
                 throw new ArgumentNullException("список пуст");
             else
                 return _head.Data;
+        }
+
+        public string GetLast()
+        {
+            if (IsEmpty)
+                throw new ArgumentNullException("список пуст");
+            else
+                return _tail.Data;
         }
 
         public bool Contains(string item)
@@ -161,6 +189,34 @@ namespace LinkedList
             }
 
             _count++;
+        }
+
+        public void RemoveData(string data)
+        {
+            if (data == null)
+                throw new ArgumentException("данные не могут быть пустые");
+
+            while (_head != null && _head.Data == data)
+            {
+                _head = _head.Next;
+                _count--;
+            }
+
+            Node current = _head;
+            while (current.Next != null)
+            {
+                if (current.Next.Data == data)
+                {
+                    current.Next = current.Next.Next;
+                    _count--;
+                }
+
+                else
+                {
+                    current = current.Next;
+                }
+
+            }
         }
 
         public IEnumerator<string> GetEnumerator()

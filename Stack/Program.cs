@@ -11,7 +11,6 @@
                 stack.Push("Оренбург");
                 stack.Push("Самара");
                 Console.WriteLine(stack.Peek());
-                Console.WriteLine(stack.Pop()) ;
             }
             catch (Exception e)
             {
