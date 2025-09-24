@@ -27,11 +27,11 @@ namespace LinkedList
          * функционал:
          * 
          * получить первый элемент !
-         * получить последний элемент - сам
+         * получить последний элемент - !
          * 
-         * удалить первый элемент - сам
+         * удалить первый элемент - !
          * удалить последний элемент !
-         * удалить элемент по его данным - сам
+         * удалить элемент по его данным - !
          * 
          * проверить наличие элемента !
          * перевернуть!
@@ -58,6 +58,18 @@ namespace LinkedList
             }
             _head = prev;
         }
+        public void RemoveFirst()
+        {
+            if (IsEmpty)
+                throw new ArgumentNullException("список пуст");
+            else if (Count == 1)
+                Clear();
+            else
+            {
+                _head = _head.Next;
+                _count--;
+            }
+        }
         public void RemoveLast()
         {
             if(IsEmpty)
@@ -76,10 +88,38 @@ namespace LinkedList
 
                 _count--;
             }
-
-
         }
+        public void RemoveData(string data)
+        {
+            if (IsEmpty)
+                throw new ArgumentNullException("список пуст");
 
+            if (data == null)
+                throw new ArgumentException("данные пустые");
+            if (_head.Data == data)
+            {
+                RemoveFirst();
+                return;
+            }
+            Node current = _head;
+            while (current.Next != null)
+            {
+                if (current.Next.Data == data)
+                {                 
+                    if (current.Next == _tail)
+                    {
+                        _tail = current;
+                    }
+
+                    current.Next = current.Next.Next;
+                    _count--;
+                    return;
+                }
+                current = current.Next;
+            }
+
+            throw new ArgumentException("элемент не найден в списке");
+        }
         public string GetFirst()
         {
             if (IsEmpty)
@@ -87,7 +127,13 @@ namespace LinkedList
             else
                 return _head.Data;
         }
+        public string GetLast()
+        {
+            if (IsEmpty)
+                throw new InvalidOperationException("Список пуст");
 
+            return _tail.Data;
+        }
         public bool Contains(string item)
         {
             if(IsEmpty)
