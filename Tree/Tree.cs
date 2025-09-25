@@ -8,7 +8,7 @@ namespace Tree
 {
     internal class Tree
     {
-        public Node Root { get;  set; } //корень дерева
+        public Node Root { get;  set; } 
         public Tree()
         {
             Root = null;
@@ -18,7 +18,7 @@ namespace Tree
         {
             string text;
             Node root;
-            if (nodeCount == 0) //базовый случай для остановки рекурсии
+            if (nodeCount == 0) 
                 root = null;
             else
             {

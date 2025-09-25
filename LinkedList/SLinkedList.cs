@@ -23,20 +23,67 @@ namespace LinkedList
             _tail = null;
             _count = 0;
         }
-        /*
-         * функционал:
-         * 
-         * получить первый элемент !
-         * получить последний элемент - сам
-         * 
-         * удалить первый элемент - сам
-         * удалить последний элемент !
-         * удалить элемент по его данным - сам
-         * 
-         * проверить наличие элемента !
-         * перевернуть!
-         * 
-         */
+       
+        // получить последний элемент
+        public string GetLast()
+        {
+            if (IsEmpty)
+                throw new ArgumentNullException("список пуст");
+            return _tail.Data;
+        }
+
+        //удалить первый элемент
+        public void RemoveFirst()
+        {
+            if (IsEmpty)
+                throw new ArgumentNullException("список пуст");
+            else if (Count == 1)
+            {
+                Clear();
+            }
+            else
+            {
+                _head = _head.Next;
+                _count--;
+            }
+        }
+
+        //удалить элемент по его данным
+        public void RemoveByValue(string item)
+        {
+            if (IsEmpty)
+                throw new ArgumentNullException("список пуст");
+
+            Node current = _head;
+            Node previous = null;
+
+            while (current != null)
+            {
+                if (current.Data == item)
+                {
+                    if (previous == null)
+                    {
+                        _head = _head.Next;
+                        if (_head == null)
+                            _tail = null;
+                    }
+                    else
+                    {
+                        previous.Next = current.Next;
+                        if (current == _tail)
+                            _tail = previous;
+                    }
+
+                    _count--;
+                    return;
+                }
+
+                previous = current;
+                current = current.Next;
+            }
+
+            throw new ArgumentException("Элемент не найден в списке");
+        }
 
         public void Reverse()
         {

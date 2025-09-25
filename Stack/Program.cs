@@ -4,25 +4,22 @@
     {
         static void Main(string[] args)
         {
-            try {
-                StackOnArray stack = new StackOnArray();
+            try
+            {
+                SStack stack = new SStack();
                 stack.Push("Москва");
                 stack.Push("Екатеринбург");
                 stack.Push("Оренбург");
-                stack.Push("Самара");
-                Console.WriteLine(stack.Peek());
-                Console.WriteLine(stack.Pop()) ;
+
+                Console.WriteLine("Верхний элемент: " + stack.Peek()); 
+                Console.WriteLine("Удалённый элемент: " + stack.Pop()); 
+                Console.WriteLine("Верхний элемент теперь: " + stack.Peek()); 
+                Console.WriteLine("Размер стека: " + stack.Count); 
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-            
-
-         
-
-
-
         }
     }
 }

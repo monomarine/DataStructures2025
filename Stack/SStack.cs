@@ -20,16 +20,6 @@ namespace Stack
         public bool IsEmpty => _top == null;
         public int Count => _count;
 
-        /*
-         * добавление элемента в стек !
-         * извлечение элемента из стека !
-         * просмотр верхнего элемента - самостоятельно
-         * проверка на пустоту !
-         * вернуть размер стека!
-         * очистить стека !
-         * 
-         */
-
         public void Push(string text)
         {
             if (text==null)
@@ -50,7 +40,9 @@ namespace Stack
         }
         public string Peek()
         {
-            return null;
+            if (IsEmpty)
+                throw new ArgumentNullException("стек пуст");
+            return _top.Data;
         }
         public void Clear()
         {

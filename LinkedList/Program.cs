@@ -10,15 +10,21 @@ namespace DataStructures
             list.AddFirst("1");
             list.AddFirst("2");
             list.AddFirst("3");
+            list.AddLast("4");
 
-            list.InsertAfter("3", "66");
-            
+            Console.WriteLine("Первый элемент: " + list.GetFirst());
+            Console.WriteLine("Последний элемент: " + list.GetLast());
+
+            list.RemoveFirst();
+            list.RemoveByValue("4");
+
+            Console.WriteLine("\nСписок после удаления:");
             foreach (var i in list)
                 Console.WriteLine(i);
 
             list.Reverse();
-
-                 foreach (var i in list)
+            Console.WriteLine("\nПосле реверса:");
+            foreach (var i in list)
                 Console.WriteLine(i);
         }
     }
