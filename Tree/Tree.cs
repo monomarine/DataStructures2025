@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
@@ -10,6 +11,7 @@ namespace Tree
     internal class Tree
     {
         public Node Root { get;  set; } //корень дерева
+        public People PeopleOne { get; set; }
         public Tree()
         {
             Root = null;
@@ -33,8 +35,9 @@ namespace Tree
             return root;
         }
         #region ДобавлениеУзла
-        private Node AddNodeRecursive(Node node, string text)
+        private People AddNodeRecursive(People node, string name, int age)
         {
+<<<<<<< HEAD
             if(node == null) //базовый случай - не встретилось совпадений
                 return new Node(text);
             int result = string.Compare(node.Value, text);
@@ -42,11 +45,23 @@ namespace Tree
                 node.Left = AddNodeRecursive(node.Left, text);
             else if( result < 0)
                 node.Right = AddNodeRecursive(node.Right, text);
+=======
+            if (node == null)
+                return new People(name, age: age);
+
+            int result = string.Compare(node.Name, name);
+
+            if (result < 0)
+                node.Left = AddNodeRecursive(node.Left, name, age);
+            else if (result > 0)
+                node.Right = AddNodeRecursive(node.Right, name, age);
+>>>>>>> 5e4b100 (Утяпов Есет)
 
             return node;
         }
-        public void AddNode(string text) =>
-            Root = AddNodeRecursive(Root, text);
+
+        public void AddNode(string name, int age) =>
+            PeopleOne = AddNodeRecursive(PeopleOne, name, age);
         #endregion
 
         #region Удаление узла
@@ -85,19 +100,19 @@ namespace Tree
         #endregion
 
         #region ОбходДереваRLR
-        private void TreeTravelsalRecursive(Node node, List<string> results)
+        private void TreeTravelsalRecursive(People node, List<People> results)
         {
             if(node!=null)
             {
-                results.Add(node.Value);
+                results.Add(node);
                 TreeTravelsalRecursive(node.Left, results);
                 TreeTravelsalRecursive(node.Right, results);
             }
         }
-        public List<string> TreeTraversal()
+        public List<People> TreeTraversal()
         {
-            List<string> results = new List<string>();
-            TreeTravelsalRecursive(Root, results);
+            List<People> results = new List<People>();
+            TreeTravelsalRecursive(PeopleOne, results);
             return results;
         }
         #endregion
@@ -118,5 +133,20 @@ namespace Tree
             FindNodeRecursive(Root, text);
 
         #endregion
+
+        public double GetAverageAge()
+        {
+            List<People> allPeople = TreeTraversal();
+
+            if (allPeople.Count == 0) return 0;
+
+            int totalAge = 0;
+            foreach (People person in allPeople)
+            {
+                totalAge += person.age;
+            }
+
+            return (double)totalAge / allPeople.Count;
+        }
     }
 }
