@@ -6,23 +6,21 @@
         {
             Tree tree = new Tree();
 
-             tree.AddNode("Tom");
-             tree.AddNode("Bob");
-             tree.AddNode("Mag");
-            tree.AddNode("1");
-            tree.AddNode("5");
-            tree.AddNode("3");
-            tree.AddNode("4");
-            tree.AddNode("2");
+            Console.WriteLine("Введите количество человек:");
+            var countText = Console.ReadLine();
+            int count = 0;
+            int.TryParse(countText, out count);
+            tree.Root = tree.CreateBalancedTree(count);
 
             var res = tree.TreeTraversal();
-            foreach (var item in res) 
-                Console.WriteLine(item);
+            foreach (var person in res)
+                Console.WriteLine(person);
 
-            tree.DeleteNode("1");
-            var res2 = tree.TreeTraversal();
-            foreach (var item in res2)
-                Console.WriteLine(item);
+            var stats = tree.GetAgeStatistics();
+            Console.WriteLine(stats);
+
+            Console.ReadKey();
+
         }
     }
 }
