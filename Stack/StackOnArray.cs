@@ -19,19 +19,19 @@ namespace Stack
             _top = -1;
         }
         public bool IsEmpty => _top == -1;
-        public int Count => _top +1;
+        public int Count => _top + 1;
 
         public void Push(string value)
         {
             if (value == null)
                 throw new ArgumentException("данные пусты");
-            if (_top == _data.Length-1)
+            if (_top == _data.Length - 1)
                 throw new ArgumentException("StackOverflow");
             _data[++_top] = value;
         }
         public string Pop()
         {
-            if(IsEmpty)
+            if (IsEmpty)
                 throw new ArgumentException("данные пусты");
             return _data[_top--];
 

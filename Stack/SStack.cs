@@ -32,10 +32,10 @@ namespace Stack
 
         public void Push(string text)
         {
-            if (text==null)
+            if (text == null)
                 throw new ArgumentNullException("записываемые данные не должны быть пусты");
             Node newNode = new Node(text);
-            newNode.Next = _top;    
+            newNode.Next = _top;
             _top = newNode;
             _count++;
         }
@@ -50,8 +50,11 @@ namespace Stack
         }
         public string Peek()
         {
-            return null;
+            if (IsEmpty)
+                throw new InvalidOperationException("Стек пуст");
+            return _top.Data;
         }
+
         public void Clear()
         {
             _top = null;

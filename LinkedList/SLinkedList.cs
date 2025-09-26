@@ -38,18 +38,73 @@ namespace LinkedList
          * 
          */
 
+        public string GetLast()
+        {
+            if (IsEmpty)
+                throw new InvalidOperationException("Список пуст");
+            return _tail.Data;
+        }
+
+        public void RemoveFirst()
+        {
+            if (IsEmpty)
+                throw new InvalidOperationException("Список пуст");
+
+            if (_count == 1)
+            {
+                Clear();
+            }
+            else
+            {
+                _head = _head.Next;
+                _count--;
+            }
+        }
+
+        public bool Remove(string data)
+        {
+            if (IsEmpty || data == null)
+                return false;
+
+            if (_head.Data == data)
+            {
+                RemoveFirst();
+                return true;
+            }
+
+            Node current = _head;
+            while (current.Next != null && current.Next.Data != data)
+            {
+                current = current.Next;
+            }
+
+            if (current.Next != null && current.Next.Data == data)
+            {
+                if (current.Next == _tail)
+                {
+                    _tail = current;
+                }
+
+                current.Next = current.Next.Next;
+                _count--;
+                return true;
+            }
+
+            return false;
+        }
+
         public void Reverse()
         {
             if (Count <= 1)
                 throw new ArgumentException("количество элементов не достаточно для реверса");
-            
+
             Node prev = null;
             Node current = _head;
             Node next = null;
 
             _tail = _head;
 
-            while(current != null)
+            while (current != null)
             {
                 next = current.Next;
                 current.Next = prev;
@@ -60,14 +115,14 @@ namespace LinkedList
         }
         public void RemoveLast()
         {
-            if(IsEmpty)
+            if (IsEmpty)
                 throw new ArgumentNullException("список пуст");
-            else if(Count == 1)
+            else if (Count == 1)
                 Clear();
             else
             {
                 Node current = _head;
-                while(current.Next != _tail)
+                while (current.Next != _tail)
                 {
                     current = current.Next;
                 }
@@ -90,12 +145,12 @@ namespace LinkedList
 
         public bool Contains(string item)
         {
-            if(IsEmpty)
+            if (IsEmpty)
                 throw new ArgumentNullException("список пуст");
             else
             {
                 Node current = _head;
-                while(current.Next != null)
+                while (current.Next != null)
                 {
                     if (current.Data == item)
                     {
@@ -166,7 +221,7 @@ namespace LinkedList
         public IEnumerator<string> GetEnumerator()
         {
             Node current = _head;
-            while(current != null)
+            while (current != null)
             {
 
                 yield return current.Data;

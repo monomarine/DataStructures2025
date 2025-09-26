@@ -8,15 +8,17 @@ namespace Graphs
 {
     internal class Node
     {
-        public string Value { get; set; }
+        public string StudentName { get; set; }
+        public double Grade { get; set; }
         public List<Node> Neighbors { get; set; }
 
-        public Node(string value)
+        public Node(string studentName, double grade = 0.0)
         {
-            Value = value;  
+            StudentName = studentName;
+            Grade = grade;
             Neighbors = new List<Node>();
         }
 
-        public override string ToString() => Value;
+        public override string ToString() => $"{StudentName} (Средний балл: {Grade:F2})";
     }
 }

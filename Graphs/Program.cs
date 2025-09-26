@@ -1,36 +1,41 @@
 ﻿using Graphs;
+using System;
 
-namespace Graph
+namespace GraphApplication
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            /*int[,] a = { { 0,0,0,0},
-                         { 0,0,1,0},
-                         { 1,0,0,0},
-                         { 1,0,1,0}
-                        };
+            GraphByList studentGraph = new GraphByList("Иван Иванов", 4.5);
 
-            GraphByMatrix graph = new GraphByMatrix(a);
-            graph.Depth(0);*/
+            Node petr = studentGraph.AddNode("Петр Петров", 4.2);
+            Node maria = studentGraph.AddNode("Мария Сидорова", 4.8, petr);
+            Node alexey = studentGraph.AddNode("Алексей Козлов", 3.9, petr);
+            Node elena = studentGraph.AddNode("Елена Новикова", 4.6, maria);
 
-            GraphByList graph = new GraphByList("Москва");
-            Node n1 = graph.AddNode("Санкт-Петербург");
-            Node n2 = graph.AddNode("Оренбург", n1);
-            Node n3 = graph.AddNode("Омск", n1);
+            studentGraph.AddEdge(maria, alexey);
+            studentGraph.AddEdge(elena, alexey);
 
-            graph.AddEdge(n2, n3);
+            Console.WriteLine("=== Обход в глубину ===");
+            studentGraph.Depth();
 
-            Node n4 = graph.AddNode("Уфа", n2);
-            graph.AddEdge(n4, n3);
-            graph.AddEdge(n4, n3);
+            Console.WriteLine("\n=== Обход в ширину ===");
+            studentGraph.Width();
 
-            graph.Width();
+            Console.WriteLine($"\n=== Статистика ===");
+            Console.WriteLine($"Количество студентов: {studentGraph.GetNodesCount()}");
+            Console.WriteLine($"Средняя успеваемость: {studentGraph.CalculateAverageGrade():F2}");
 
-            Console.WriteLine();
+            Node mostSociable = studentGraph.FindMostSociableStudent();
+            Console.WriteLine($"Самый общительный студент: {mostSociable.StudentName}");
+            Console.WriteLine($"Количество связей: {mostSociable.Neighbors.Count}");
 
-            graph.Depht();
+            Console.WriteLine($"Граф содержит цикл: {studentGraph.HasCycle()}");
+
+            Node found = studentGraph.FindNode("Мария Сидорова");
+            if (found != null)
+                Console.WriteLine($"Найден студент: {found.StudentName} с оценкой {found.Grade}");
         }
     }
 }
