@@ -1,4 +1,5 @@
 ﻿using LinkedList;
+using System.Security.Cryptography.X509Certificates;
 
 namespace DataStructures
 {
@@ -6,7 +7,7 @@ namespace DataStructures
     {
         static void Main(string[] args)
         {
-            SLinkedList list = new SLinkedList();
+            SLinkedList<string> list = new();
             list.AddFirst("1");
             list.AddFirst("2");
             list.AddFirst("3");

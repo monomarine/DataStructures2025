@@ -1,28 +1,34 @@
-﻿namespace Stack
+namespace Stack
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            try {
-                StackOnArray stack = new StackOnArray();
-                stack.Push("Москва");
-                stack.Push("Екатеринбург");
-                stack.Push("Оренбург");
-                stack.Push("Самара");
-                Console.WriteLine(stack.Peek());
-                Console.WriteLine(stack.Pop()) ;
-            }
-            catch (Exception e)
+            StackOnArray stack = new();
+            stack.Push("Первый");
+            stack.Push("Второй");
+            stack.Push("Третий");
+
+            foreach (var item in stack)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine(item);
             }
-            
 
-         
+            Console.WriteLine($"=Получаем первый => {stack.Peek()}=");
+            Console.WriteLine($"=Вытягиваем первый => {stack.Pop()}=");
 
+            foreach (var item in stack)
+            {
+                Console.WriteLine(item);
+            }
 
+            Console.WriteLine("=Очищаем=");
+            stack.Clear();
 
+            foreach (var item in stack)
+            {
+                Console.WriteLine(item);
+            }
         }
     }
 }

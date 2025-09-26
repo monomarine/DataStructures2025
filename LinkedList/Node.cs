@@ -8,15 +8,15 @@ namespace LinkedList
 {
 #pragma warning disable
 
-    internal class Node //узел списка
-    {
-        public string Data { get; set; }
-        public Node Next { get; set; }
+	internal class Node<T> //узел списка
+	{
+		public T Data { get; set; }
+		public Node<T> Next { get; set; }
 
-        public Node(string data)
-        {
-            Data = data;
-            Next = null;
-        }
-    }
+		public Node(T data)
+		{
+			Data = data;
+			Next = null;
+		}
+	}
 }

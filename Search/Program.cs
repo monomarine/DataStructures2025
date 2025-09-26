@@ -7,14 +7,7 @@ namespace Search
     {
         static void Main(string[] args)
         {
-            int key = 64655;
-            int[] data = GetArray(25231165, key);
-
             
-            Console.WriteLine();
-            Console.WriteLine(Search.IterativeBinarySearch(key, data));
-            Console.WriteLine(Search.LinearSearch(key, data));
-            Console.WriteLine(Search.InterpolateSearch(key, data));
         }
 
         static int[] GetArray(int count, int key)

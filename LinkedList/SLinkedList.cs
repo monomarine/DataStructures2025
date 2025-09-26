@@ -1,29 +1,25 @@
-﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LinkedList
 {
 #pragma warning disable
-    internal class SLinkedList : IEnumerable<string>
-    {
-        private Node _head;
-        private Node _tail;
-        private int _count;
+	internal class SLinkedList<T> : IEnumerable<T>
+	{
+		private Node<T> _head;
+		private Node<T> _tail;
+		private int _count;
 
-        public int Count => _count;
-        public bool IsEmpty => _head == null;
+		public int Count => _count;
+		public bool IsEmpty => _head == null;
 
-        public SLinkedList()
-        {
-            _head = null;
-            _tail = null;
-            _count = 0;
-        }
-        /*
+		public SLinkedList()
+		{
+			_head = null;
+			_tail = null;
+			_count = 0;
+		}
+
+		/*
          * функционал:
          * 
          * получить первый элемент !
@@ -37,153 +33,201 @@ namespace LinkedList
          * перевернуть!
          * 
          */
+         
+		public string GetFirst()
+		{
+			return _head == null ? null : _head.Data.ToString();
+		}
 
-        public void Reverse()
-        {
-            if (Count <= 1)
-                throw new ArgumentException("количество элементов не достаточно для реверса");
-            
-            Node prev = null;
-            Node current = _head;
-            Node next = null;
+		public string GetLast()
+		{
+			return _tail == null ? null : _tail.Data.ToString();
+		}
 
-            _tail = _head;
+		public bool Contains(T data)
+		{
+			if (IsEmpty)
+				return false;
 
-            while(current != null)
-            {
-                next = current.Next;
-                current.Next = prev;
-                prev = current;
-                current = next;
-            }
-            _head = prev;
-        }
-        public void RemoveLast()
-        {
-            if(IsEmpty)
-                throw new ArgumentNullException("список пуст");
-            else if(Count == 1)
-                Clear();
-            else
-            {
-                Node current = _head;
-                while(current.Next != _tail)
-                {
-                    current = current.Next;
-                }
-                current.Next = null;
-                _tail = current;
+			Node<T> current = _head;
 
-                _count--;
-            }
+			while (current != null)
+			{
+				if (current.Data.Equals(data))
+					return true;
+				current = current.Next;
+			}
+			return false;
+		}
 
+		public void RemoveFirst()
+		{
+			if (IsEmpty)
+				throw new ArgumentOutOfRangeException("список пуст");
 
-        }
+			Node<T> nextHead = _head.Next;
+			_head.Next = null;
+			_head = nextHead;
 
-        public string GetFirst()
-        {
-            if (IsEmpty)
-                throw new ArgumentNullException("список пуст");
-            else
-                return _head.Data;
-        }
+			_count--;
+		}
 
-        public bool Contains(string item)
-        {
-            if(IsEmpty)
-                throw new ArgumentNullException("список пуст");
-            else
-            {
-                Node current = _head;
-                while(current.Next != null)
-                {
-                    if (current.Data == item)
-                    {
-                        return true;
-                    }
-                    current = current.Next;
-                }
-                return false;
-            }
-        }
-        public void AddFirst(string text)
-        {
-            if (text == null)
-                throw new ArgumentException("данные пустые");
-            Node newNode = new Node(text);
-            if (_head == null)
-            {
-                _head = newNode;
-                _tail = newNode;
-            }
-            else
-            {
-                newNode.Next = _head;
-                _head = newNode;
-            }
-            _count++;
-        }
+		public void RemoveLast()
+		{
+			if (IsEmpty)
+				throw new ArgumentOutOfRangeException("список пуст");
 
-        public void AddLast(string text)
-        {
-            if (text == null)
-                throw new ArgumentException("данные пустые");
-            Node newNode = new Node(text);
-            if (_head == null)
-            {
-                _head = newNode;
-                _tail = newNode;
-            }
-            else
-            {
-                _tail.Next = newNode;
-                _tail = newNode;
-            }
-            _count++;
-        }
+			Node<T> current = _head;
 
-        public void InsertAfter(string existingText, string text)
-        {
-            if (existingText == null || text == null)
-                throw new ArgumentException("данные не могут быть пустые");
-            Node newNode = new Node(text);
-            Node current = _head;
-            while (current.Next != null)
-            {
-                if (current.Data == existingText)
-                {
-                    newNode.Next = current.Next;
-                    current.Next = newNode;
-                    if (current == _tail)
-                        _tail = current;
-                }
-                current = current.Next;
-            }
+			while (current.Next.Next != null)
+				current = current.Next;
 
-            _count++;
-        }
+			current.Next.Next = null;
+			current.Next = null;
+			_tail = current;
 
-        public IEnumerator<string> GetEnumerator()
-        {
-            Node current = _head;
-            while(current != null)
-            {
+			_count--;
+		}
 
-                yield return current.Data;
-                current = current.Next;
-            }
-        }
+		public void Remove(T data)
+		{
+			if (IsEmpty)
+				throw new ArgumentOutOfRangeException("список пуст");
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+			Node<T> current = _head;
 
-        public void Clear()
-        {
-            _head = null;
-            _tail = null;
-            _count = 0;
-        }
-    }
+			while (current != null)
+			{
+				if (current.Next != null && current.Next.Data.Equals(data))
+				{
+					if (current.Next.Next != null)
+					{
+						current.Next = current.Next.Next;
+					}
+					else
+					{
+						current.Next = null;
+						_tail = current;
+					}
+
+					_count--;
+					break;
+				}
+				current = current.Next;
+			}
+		}
+
+		public void Clear()
+		{
+			Node<T> current = _head;
+
+			while (current != null)
+			{
+				current.Next = null;
+			}
+
+			_head = null;
+			_tail = null;
+			_count = 0;
+		}
+
+		public void Reverse()
+		{
+			Node<T> current = _head;
+
+			Node<T> previous = null;
+			Node<T> next = null;
+
+			_tail = _head;
+
+			while (current != null)
+			{
+				next = current.Next;
+				current.Next = previous;
+				previous = current;
+				current = next;
+			}
+
+			_head = previous;
+
+			Node<T> head = _head;
+			_tail = head;
+			_head = _tail;
+		}
+
+		public void AddFirst(T data)
+		{
+			if (data == null)
+				throw new ArgumentException("данные пустые");
+
+			Node<T> node = new(data);
+
+			if (IsEmpty)
+				_tail = node;
+			node.Next = _head;
+			_head = node;
+
+			_count++;
+		}
+
+		public void InsertAfter(T existing, T data)
+		{
+			if (existing == null || data == null)
+				throw new ArgumentException("данные пустые");
+			if (IsEmpty)
+			{
+				AddFirst(data);
+				return;
+			}
+
+			Node<T> node = new(data);
+			Node<T> current = _head;
+
+			while (current.Next != null)
+			{
+				if (current.Data.Equals(existing))
+				{
+					node.Next = current.Next;
+					current.Next = node;
+					_count++;
+					break;
+				}
+				current = current.Next;
+			}
+
+		}
+
+		public void AddLast(T data)
+		{
+			if (data == null)
+				throw new ArgumentException("данные пустые");
+
+			Node<T> node = new Node<T>(data);
+
+			if (IsEmpty)
+				_head = node;
+
+			Node<T> prevTail = _tail;
+			prevTail.Next = node;
+
+			_tail = node;
+
+			_count++;
+		}
+
+		public IEnumerator<T> GetEnumerator()
+		{
+			Node<T> current = _head;
+			while (current != null)
+			{
+				yield return current.Data;
+				current = current.Next;
+			}
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
+	}
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -7,117 +7,122 @@ using System.Threading.Tasks;
 
 namespace Tree
 {
-    internal class Tree
-    {
-        public Node Root { get;  set; } //корень дерева
-        public Tree()
-        {
-            Root = null;
-        }
+	internal class Tree
+	{
+		public Node Root { get; set; }
+		
+		public Tree()
+		{
+			Root = null;
+		}
 
-        public Node CreateBalancedTree(int nodeCount)
-        {
-            string text;
-            Node root;
-            if (nodeCount == 0) //базовый случай для остановки рекурсии
-                root = null;
-            else
-            {
-                Console.WriteLine("введите значения узла");
-                text = Console.ReadLine();
-                root = new Node(text);
-                root.Left = CreateBalancedTree(nodeCount /  2);
-                root.Right = CreateBalancedTree(nodeCount - nodeCount / 2 - 1); ;
-            }
+		public Node CreateBalancedTree(int nodeCount)
+		{
+			string text;
+			DateTime birthDate = new DateTime(2000,1,1);
+			Node root;
+		
+			if (nodeCount == 0) 
+				root = null;
+			else
+			{
+				Console.WriteLine("Введите ФИО для пользователя");
+				text = Console.ReadLine();
+				Console.WriteLine("Введите дату рождения пользователя");
+				DateTime.TryParse(Console.ReadLine(), out birthDate);
+				root = new Node(new User(text, birthDate));
+				root.Left = CreateBalancedTree(nodeCount / 2);
+				root.Right = CreateBalancedTree(nodeCount - nodeCount / 2 - 1);
+			}
+			return root;
+		}
 
-            return root;
-        }
-        #region ДобавлениеУзла
-        private Node AddNodeRecursive(Node node, string text)
-        {
-            if(node == null) //базовый случай - не встретилось совпадений
-                return new Node(text);
-            int result = string.Compare(node.Value, text);
-            if(result < 0)
-                node.Left = AddNodeRecursive(node.Left, text);
-            else if( result > 0)
-                node.Right = AddNodeRecursive(node.Right, text);
+		private Node AddNodeRecursive(Node node, User value)
+		{
+			if (node == null)
+				return new Node(value);
+			if (value.Age < node.Value.Age)
+				node.Left = AddNodeRecursive(node.Left,value);
+			else if (value.Age > node.Value.Age)
+				node.Right = AddNodeRecursive(node.Right, value);
+			return node;
+		}
 
-            return node;
-        }
-        public void AddNode(string text) =>
-            Root = AddNodeRecursive(Root, text);
-        #endregion
+		public void AddNode(User value) =>
+			Root = AddNodeRecursive(Root, value);
 
-        #region Удаление узла
-        private Node DeleteNodeRecursive(Node node, string text)
-        {
-            if (node == null) return null;
-            int result = string.Compare(node.Value, text);
-            if(result < 0)
-                node.Left = DeleteNodeRecursive(node.Left, text);
-            else if(result > 0)
-                node.Right = DeleteNodeRecursive(node.Right, text);
-            else //удаление найденного элемента
-            {
-                if (node.Left == null)
-                    return node.Right;
-                else if(node.Right == null)
-                    return node.Left;
+		private void TreeTraversalRecursive(Node node,List<User> results)
+		{
+			if (node == null) return;
 
-                node.Value = FindMinValue(node.Right);
-                node.Right = DeleteNodeRecursive(node.Right, node.Value);
+			results.Add(node.Value);
+			TreeTraversalRecursive(node.Left, results);
+			TreeTraversalRecursive(node.Right, results);
+		}
 
-            }
-            return node;
-        }
-        private string FindMinValue(Node node)
-        {
-            string minValue = node.Value;
-            while(node.Left != null)
-            {
-                minValue = node.Left.Value;
-                node = node.Left;
-            }
-            return minValue;
-        }
-        public void DeleteNode(string text)=>
-            DeleteNodeRecursive(Root, text);
-        #endregion
+		public List<User> TreeTraversal()
+		{
+			List<User> results = new();
+			TreeTraversalRecursive(Root, results);
+			return results;
+		}
 
-        #region ОбходДереваRLR
-        private void TreeTravelsalRecursive(Node node, List<string> results)
-        {
-            if(node!=null)
-            {
-                results.Add(node.Value);
-                TreeTravelsalRecursive(node.Left, results);
-                TreeTravelsalRecursive(node.Right, results);
-            }
-        }
-        public List<string> TreeTraversal()
-        {
-            List<string> results = new List<string>();
-            TreeTravelsalRecursive(Root, results);
-            return results;
-        }
-        #endregion
+		public float AverageAge()
+		{
+			List<User> results = TreeTraversal();
+			float fullValue = 0;
+			foreach (var item in results)
+			{
+				fullValue += item.Age;
+			}
+			return fullValue / results.Count;
+		}
 
-        #region ПоискУзлаПоЗначению
-        private bool FindNodeRecursive(Node node, string text)
-        {
-            if(node==null) return false;
-            int resurt = string.Compare(node.Value, text);
-            if (resurt == 0)
-                return true;
-            else if (resurt < 0)
-                return FindNodeRecursive(node.Left, text);
-            else
-                return FindNodeRecursive(node.Right, text);
-        }
-        public bool FindNode(string text)=>
-            FindNodeRecursive(Root, text);
+		private bool FindNodeRecursive(Node node, User value)
+		{
+			if (node == null) return false;
+			if (node.Value.Age == value.Age)
+				return true;
+			else if (value.Age < node.Value.Age)
+				return FindNodeRecursive(node.Left, value);
+			else
+				return FindNodeRecursive(node.Right, value);
+		}
 
-        #endregion
-    }
-}
+		private Node DeleteNodeRecursive(Node node, User value)
+		{
+			if (node == null) return null;
+			if (value.Age < node.Value.Age)
+				node.Left = DeleteNodeRecursive(node.Left, value);
+			else if (value.Age > node.Value.Age)
+				node.Right = DeleteNodeRecursive(node.Right, value);
+			else
+			{
+				if (node.Left == null)
+					return node.Right;
+				else if (node.Right == null)
+					return node.Left;
+
+				node.Value = FindMinValue(node.Right);
+				node.Right = DeleteNodeRecursive(node.Right, node.Value);
+			}
+			return node;
+		}
+
+		public void DeleteNode(User value) =>
+			DeleteNodeRecursive(Root, value);
+
+		private User FindMinValue(Node node)
+		{
+			User minValue = node.Value;
+			while (node.Left != null)
+			{
+				minValue = node.Left.Value;
+				node = node.Left;
+			}
+			return minValue;
+		}
+
+		public bool FindNode(User value) =>
+			FindNodeRecursive(Root, value);
+	}
