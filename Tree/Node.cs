@@ -9,15 +9,17 @@ namespace Tree
 #pragma warning disable
     internal class Node
     {
-        public string Value { get; set; } //полезные данные
+        public People People { get; set; } //полезные данные
         public Node Left { get; set; } //ссылка на левое поддерево
         public Node Right { get; set; } //ссылка на правое поддерево
 
-        public Node(string value = null, Node left = null, Node right = null)
+        public Node(People people = null, Node left = null, Node right = null)
         {
-            this.Value = value;
+            this.People = people;
             this.Left = left;
             this.Right = right;
         }
+
+        public override string ToString() => People.ToString();
     }
 }
