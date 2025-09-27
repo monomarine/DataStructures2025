@@ -1,28 +1,20 @@
 ﻿namespace Tree
 {
-    internal class Program
+    class Program
     {
         static void Main(string[] args)
         {
+            Student student1 = new Student("Иван", DateTime.Parse("2005-04-20"));
+            Student student2 = new Student("Петр", DateTime.Parse("2002-04-20"));
+            Student student3 = new Student("Мария", DateTime.Parse("2001-04-20"));
+
             Tree tree = new Tree();
+            tree.AddNode(student1);
+            tree.AddNode(student2);
+            tree.AddNode(student3);
 
-             tree.AddNode("Tom");
-             tree.AddNode("Bob");
-             tree.AddNode("Mag");
-            tree.AddNode("1");
-            tree.AddNode("5");
-            tree.AddNode("3");
-            tree.AddNode("4");
-            tree.AddNode("2");
-
-            var res = tree.TreeTraversal();
-            foreach (var item in res) 
-                Console.WriteLine(item);
-
-            tree.DeleteNode("1");
-            var res2 = tree.TreeTraversal();
-            foreach (var item in res2)
-                Console.WriteLine(item);
+            Console.WriteLine($"{tree.CalculateAverageAge():F1} лет");
+            Console.ReadLine();
         }
     }
 }
