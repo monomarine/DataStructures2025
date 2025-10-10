@@ -1,9 +1,7 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace _02._04_Delegates
+﻿namespace _02._04_Delegates
 {
     public delegate bool FilterDelegate(int x);
-    public delegate bool FilterStringsDelegate(string text);
+    public delegate bool StringFilterDelegate(string x);
     internal class Program
     {
         //переписать код для коллекции строк и произвести фильтрацию строк (вывести в результат только
@@ -11,28 +9,20 @@ namespace _02._04_Delegates
         static void Main(string[] args)
         {
             List<int> numbers = new() { 4, 8, 2, 8, 5, 98, 8, 5, };
-            List<string> strings = new() { "user", "admin$", "гость"};
-            var res1 = Filter(strings, text =>
+            var res1 = Filter(numbers, n => n % 2 == 0);
+            var res2 = Filter(numbers, n => n > 10);
+
+            List<string> strings = new()
             {
-                foreach (var r in text)   
-                {
-                    if (!char.IsLetterOrDigit(r)) 
-                    return false;
-                }
-                return true;
-            });
+                "hello"
+            };
 
-            foreach(var r in res1)
-            {
-                Console.Write(r+ " ");
-            }
-            //var res1 = Filter(numbers, n => n % 2 == 0);
-            //var res2 = Filter(numbers, n => n > 10);
+            var stringResult = FilterStrings(strings, s => !ContainsSpecialCharacters(s));
+            Console.WriteLine("Строки без специальных символов:");
+            foreach (var r in stringResult)
+                Console.WriteLine(r);
 
 
-
-            //foreach(var r in res2)
-            //Console.Write(r+ " ");
         }
 
         public static List<int> Filter(List<int> data, FilterDelegate delegat)
@@ -46,15 +36,28 @@ namespace _02._04_Delegates
             return result;
         }
 
-        public static List<string> Filter(List<string> data, FilterStringsDelegate delegat)
+        public static List<string> FilterStrings(List<string> data, StringFilterDelegate delegat)
         {
-            var resultstrings = new List<string>();
+            var result = new List<string>();
             foreach (string d in data)
             {
                 if (delegat(d))
-                    resultstrings.Add(d);
+                {
+                    result.Add(d);
+                }
             }
-            return resultstrings;
+            return result;
+        }
+        public static bool ContainsSpecialCharacters(string input)
+        {
+            foreach (char c in input)
+            {
+                if (!char.IsLetterOrDigit(c) && !char.IsWhiteSpace(c))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
