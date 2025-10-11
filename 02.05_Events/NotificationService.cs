@@ -1,46 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using _02._05_Events;
 
-namespace _02._05_Events
+
+namespace _02._05_EventsWPF
 {
-#pragma warning disable
     internal class NotificationService : IDisposable
     {
         private List<Order> _orders = new();
-        private string _logFile = "logs.txt";
-        
-        public void AddOrder(Order order)
+        private readonly Logger _logger;
+
+        public event EventHandler<OrderEventArgs>? UpdateData;
+
+        public NotificationService()
         {
-            order.Purchased += OrderPaid;
-            _orders.Add(order);
+            _logger = new Logger();
         }
+
+        public void AddOrder(params Order[] orders)
+        {
+            foreach (var order in orders)
+            {
+                order.Purchased += OrderPaid;
+                _orders.Add(order);
+            }
+        }
+
         private void CleanPublishers()
         {
             foreach (var o in _orders)
                 o.Purchased -= OrderPaid;
 
-            _orders = null;
+            _orders.Clear();
         }
 
-        public void OrderPaid(object send, OrderEventArgs e)
+        private void OrderPaid(object sender, OrderEventArgs e)
         {
-            if(send is  Order)
+            if (sender is Order order)
             {
-                var order = (Order)send;
-                string orderInfo = $"оплата от заказчика {order.Client} по заказу номер {order.Id} на сумму {e.Summ}";
-                Console.WriteLine(orderInfo);
-                File.AppendAllText(_logFile, $"{e.TimeStamp}\t{orderInfo}");
+                string message = $"Оплата от заказчика {order.Client} по заказу №{order.Id} на сумму {e.Summ}";
+
+                _logger.Log(message);
+                UpdateData?.Invoke(this, new OrderEventArgs(message, e.Summ));
             }
-
-
         }
 
-        public void Dispose()
-        {
-            CleanPublishers();
-        }
+        public void Dispose() => CleanPublishers();
     }
 }
