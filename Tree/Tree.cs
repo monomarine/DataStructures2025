@@ -23,7 +23,7 @@ namespace Tree
                 root = null;
             else
             {
-                Console.WriteLine("введите значения узла");
+                Console.WriteLine("введите значения узел");
                 text = Console.ReadLine();
                 root = new Node(text);
                 root.Left = CreateBalancedTree(nodeCount /  2);

@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace _02._05_EventsWPF.Data
 {
-
-    public class NotificationService : IDisposable
+    public class OrderDisplayService : IDisposable
     {
         private List<Order> _orders = new();
-        private string _logFile = "logs.txt";
 
         public event EventHandler<OrderEventArgs>? UpdateData;
 
@@ -24,28 +21,24 @@ namespace _02._05_EventsWPF.Data
         {
             foreach (var o in orders)
             {
-                o.Purchased += ProcessOrderPayment;
+                o.Purchased += DisplayOrderInfo;
                 _orders.Add(o);
             }
         }
 
-        private void ProcessOrderPayment(object? sender, OrderEventArgs e)
+        private void DisplayOrderInfo(object? sender, OrderEventArgs e)
         {
             if (sender is Order order)
             {
-
                 string displayMessage = $"оплата от заказчика {order.Client} по заказу номер {order.Id} на сумму {e.Summ}";
                 OnUpdateData(new OrderEventArgs(displayMessage, e.Summ));
-
-                string logEntry = $"\n{e.TimeStamp}\tоплата от заказчика {order.Client} по заказу номер {order.Id} на сумму {e.Summ}";
-                File.AppendAllText(_logFile, logEntry);
             }
         }
 
         private void CleanPublishers()
         {
             foreach (var o in _orders)
-                o.Purchased -= ProcessOrderPayment;
+                o.Purchased -= DisplayOrderInfo;
 
             _orders.Clear();
         }
